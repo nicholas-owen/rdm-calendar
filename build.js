@@ -51,6 +51,19 @@ try {
         const dateTo = formatDate(conf.next['date-to']);
         const dateDisplay = dateFrom === dateTo ? dateFrom : `${dateFrom} - ${dateTo}`;
 
+        let professionsHtml = '';
+        if (conf.professions && Array.isArray(conf.professions)) {
+            professionsHtml = `<div class="profession-tags">` +
+                conf.professions.map(p => {
+                    let hash = 0;
+                    for (let i = 0; i < p.length; i++) {
+                        hash = p.charCodeAt(i) + ((hash << 5) - hash);
+                    }
+                    const hue = Math.abs(hash % 360);
+                    return `<span class="profession-tag" style="--tag-hue: ${hue}">${p}</span>`;
+                }).join('') + `</div>`;
+        }
+
         const infoHtml = conf.next.info ? `
         <div class="conference-details">
             <button class="info-toggle" aria-expanded="false">
@@ -58,7 +71,7 @@ try {
                 <span>More Info</span>
             </button>
             <div class="info-content" hidden>
-                <p>${conf.next.info}</p>
+                <p>${conf.next.info.replace(/\n/g, '<br>')}</p>
             </div>
         </div>` : '';
 
@@ -72,6 +85,7 @@ try {
         <div class="conference-card">
             <div class="conference-main">
                 <div class="conference-header">
+                    ${professionsHtml}
                     <h3><a href="${conf.link}" target="_blank">${conf.name}</a></h3>
                     <div class="conference-meta">
                         <span class="conference-date">${dateDisplay}</span>

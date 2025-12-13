@@ -1,5 +1,9 @@
 name: Example Title
 link: https://www.site.org
+professions:
+  - Data Stewards
+  - RSE
+  - Data Scientist
 next:
   date-from: 
   date-to: 

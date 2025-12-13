@@ -12,6 +12,12 @@
     --dialog-bg: #ffffff;
     --dialog-overlay: rgba(0, 0, 0, 0.5);
     --muted-color: #64748b;
+
+    /* Tag variables (Defaults for Light) */
+    --tag-sat: 85%;
+    --tag-light: 90%;
+    --tag-text-light: 30%;
+    /* L value for text color */
 }
 
 .theme-dark {
@@ -26,6 +32,11 @@
     --dialog-bg: #1e293b;
     --dialog-overlay: rgba(255, 255, 255, 0.1);
     --muted-color: #94a3b8;
+
+    /* Tag variables for Dark */
+    --tag-sat: 60%;
+    --tag-light: 25%;
+    --tag-text-light: 90%;
 }
 
 .theme-modern {
@@ -43,6 +54,11 @@
     /* Glassmorphism effects handled in classes */
     --backdrop-blur: blur(10px);
     --muted-color: #8b949e;
+
+    /* Tag variables for Modern */
+    --tag-sat: 70%;
+    --tag-light: 20%;
+    --tag-text-light: 85%;
 }
 
 * {
@@ -153,13 +169,23 @@ body {
 .conference-main {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    /* Changed to start for tag alignment */
     width: 100%;
+    gap: 20px;
+    /* Gap between content and button */
+}
+
+/* Header tweaks */
+.conference-header {
+    flex: 1;
 }
 
 .conference-header h3 {
     margin-bottom: 8px;
     font-size: 1.25rem;
+    margin-top: 8px;
+    /* Added spacing from tags */
 }
 
 .conference-header h3 a {
@@ -170,6 +196,28 @@ body {
 
 .conference-header h3 a:hover {
     color: var(--primary-color);
+}
+
+/* Profession Tags */
+.profession-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+.profession-tag {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    /* Tablet shape */
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    background-color: hsl(var(--tag-hue), var(--tag-sat), var(--tag-light));
+    color: hsl(var(--tag-hue), 80%, var(--tag-text-light));
+    white-space: nowrap;
 }
 
 /* Meta info (Date & Location) */
@@ -197,6 +245,12 @@ body {
 
 .location-icon {
     opacity: 0.8;
+}
+
+.conference-actions {
+    flex-shrink: 0;
+    padding-top: 10px;
+    /* Align with title visually */
 }
 
 .btn-visit {
