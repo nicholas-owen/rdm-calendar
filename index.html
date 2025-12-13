@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Conferences Calendar</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="theme-modern">
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-icon" id="settings-trigger" title="Settings">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="page-header">
+                <h1>Conference Calendar</h1>
+                <p>Upcoming scientific meetings and events.</p>
+            </header>
+
+            <div class="conference-list">
+                
+        <div class="conference-card">
+            <div class="conference-header">
+                <h3><a href="https://www.force11.org" target="_blank">FORCE11</a></h3>
+                <span class="conference-date">October 16, 2019 - October 17, 2019</span>
+            </div>
+            <div class="conference-actions">
+                <a href="https://www.force11.org/meetings/force2019" target="_blank" class="btn-visit">Visit Meeting Page</a>
+            </div>
+        </div>
+        
+
+        <div class="conference-card">
+            <div class="conference-header">
+                <h3><a href="https://www.rd-alliance.org" target="_blank">RDA Plenary</a></h3>
+                <span class="conference-date">November 12, 2024 - November 14, 2024</span>
+            </div>
+            <div class="conference-actions">
+                <a href="https://www.rd-alliance.org/plenaries" target="_blank" class="btn-visit">Visit Meeting Page</a>
+            </div>
+        </div>
+        
+            </div>
+        </main>
+    </div>
+
+    <!-- Settings Dialog -->
+    <dialog id="settings-dialog" class="settings-modal">
+        <div class="modal-header">
+            <h2>Settings</h2>
+            <button id="close-settings" class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <h3>Theme</h3>
+            <div class="theme-options">
+                <button class="theme-btn" data-theme="theme-light">Light</button>
+                <button class="theme-btn" data-theme="theme-dark">Dark</button>
+                <button class="theme-btn" data-theme="theme-modern">Modern</button>
+            </div>
+        </div>
+    </dialog>
+
+    <script src="script.js"></script>
+</body>
+</html>
