@@ -68,12 +68,12 @@ try {
                 <div class="conference-header">
                     <h3><a href="${conf.link}" target="_blank">${conf.name}</a></h3>
                     <span class="conference-date">${dateDisplay}</span>
+                    ${infoHtml}
                 </div>
                 <div class="conference-actions">
                     <a href="${conf.next.link}" target="_blank" class="btn-visit">Visit Meeting Page</a>
                 </div>
             </div>
-            ${infoHtml}
         </div>
         `;
     }).join('\n');

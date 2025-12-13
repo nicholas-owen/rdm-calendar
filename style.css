@@ -196,9 +196,9 @@ body {
 
 /* Info Section */
 .conference-details {
-    margin-top: 15px;
-    border-top: 1px solid var(--sidebar-border);
-    padding-top: 15px;
+    margin-top: 8px;
+    /* border-top: 1px solid var(--sidebar-border); Removed border */
+    /* padding-top: 15px; Reduced padding */
 }
 
 .info-toggle {
@@ -206,7 +206,8 @@ body {
     border: none;
     color: var(--muted-color);
     cursor: pointer;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
+    /* Slightly smaller */
     display: flex;
     align-items: center;
     gap: 5px;
