@@ -217,6 +217,8 @@ body {
     letter-spacing: 0.02em;
     background-color: hsl(var(--tag-hue), var(--tag-sat), var(--tag-light));
     color: hsl(var(--tag-hue), 80%, var(--tag-text-light));
+    border: 1px solid hsl(var(--tag-hue), var(--tag-sat), 80%);
+    /* Added border for better shape definition */
     white-space: nowrap;
 }
 
