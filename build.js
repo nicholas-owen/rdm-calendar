@@ -51,22 +51,36 @@ try {
         const dateTo = formatDate(conf.next['date-to']);
         const dateDisplay = dateFrom === dateTo ? dateFrom : `${dateFrom} - ${dateTo}`;
 
+        const infoHtml = conf.next.info ? `
+        <div class="conference-details">
+            <button class="info-toggle" aria-expanded="false">
+                <svg class="chevron-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                <span>More Info</span>
+            </button>
+            <div class="info-content" hidden>
+                <p>${conf.next.info}</p>
+            </div>
+        </div>` : '';
+
         return `
         <div class="conference-card">
-            <div class="conference-header">
-                <h3><a href="${conf.link}" target="_blank">${conf.name}</a></h3>
-                <span class="conference-date">${dateDisplay}</span>
+            <div class="conference-main">
+                <div class="conference-header">
+                    <h3><a href="${conf.link}" target="_blank">${conf.name}</a></h3>
+                    <span class="conference-date">${dateDisplay}</span>
+                </div>
+                <div class="conference-actions">
+                    <a href="${conf.next.link}" target="_blank" class="btn-visit">Visit Meeting Page</a>
+                </div>
             </div>
-            <div class="conference-actions">
-                <a href="${conf.next.link}" target="_blank" class="btn-visit">Visit Meeting Page</a>
-            </div>
+            ${infoHtml}
         </div>
         `;
     }).join('\n');
 
     // Read template
     let template = fs.readFileSync(templateSrcPath, 'utf8');
-    
+
     // Inject list
     const finalHtml = template.replace('<!-- CONFERENCE_LIST_PLACEHOLDER -->', listHtml);
 

@@ -41,4 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
         body.classList.add(themeName);
         localStorage.setItem('theme', themeName);
     }
+
+    // Info Toggle Logic (Event Delegation)
+    document.querySelector('.conference-list').addEventListener('click', (e) => {
+        const toggleBtn = e.target.closest('.info-toggle');
+        if (toggleBtn) {
+            const isExpanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+            toggleBtn.setAttribute('aria-expanded', !isExpanded);
+
+            const content = toggleBtn.nextElementSibling;
+            if (content) {
+                content.hidden = isExpanded;
+            }
+        }
+    });
 });
