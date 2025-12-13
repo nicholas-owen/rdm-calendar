@@ -207,18 +207,23 @@ body {
 }
 
 .profession-tag {
-    display: inline-block;
-    padding: 2px 8px;
-    border-radius: 12px;
-    /* Tablet shape */
-    font-size: 0.75rem;
+    display: inline-flex;
+    /* Use flex for icon alignment */
+    align-items: center;
+    gap: 4px;
+    /* Space between icon and text */
+    padding: 3px 10px;
+    /* Slightly more padding for pill shape */
+    border-radius: 999px;
+    /* Full pill shape */
+    font-size: 0.7rem;
+    /* Smaller font */
     font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 0.02em;
+    letter-spacing: 0.03em;
     background-color: hsl(var(--tag-hue), var(--tag-sat), var(--tag-light));
     color: hsl(var(--tag-hue), 80%, var(--tag-text-light));
     border: 1px solid hsl(var(--tag-hue), var(--tag-sat), 80%);
-    /* Added border for better shape definition */
     white-space: nowrap;
 }
 
