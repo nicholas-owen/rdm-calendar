@@ -157,8 +157,7 @@ body {
 }
 
 .sidebar-icon {
-    margin-left: 20px;
-    /* Align icon with padding */
+    /* margin-left: 20px; Removed to fix alignment in sidebar-actions */
 }
 
 /* Filter Buttons */

@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const closeSettings = document.getElementById('close-settings');
     const themeBtns = document.querySelectorAll('.theme-btn');
     const body = document.body;
+    const savedTheme = localStorage.getItem('theme') || 'theme-modern';
 
     // Filter Logic
     const filterBtns = document.querySelectorAll('.filter-btn');
