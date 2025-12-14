@@ -154,6 +154,40 @@ try {
     // Inject before script.js
     finalHtml = finalHtml.replace('<script src="script.js"></script>', `${dataScript}\n    <script src="script.js"></script>`);
 
+    // Inject Info Button & Dialog
+    const marked = require('marked');
+    const infoPath = path.join(dataDir, 'README.md');
+    let infoContentHtml = '<p>No info available.</p>';
+    if (fs.existsSync(infoPath)) {
+        const infoMd = fs.readFileSync(infoPath, 'utf8');
+        infoContentHtml = marked.parse(infoMd);
+    }
+
+    // 1. Inject Info Icon in Sidebar (Next to Settings)
+    // We look for the settings trigger and append the info trigger
+    const settingsIconHtml = `<div class="sidebar-icon" id="settings-trigger" title="Settings">`;
+    const infoIconHtml = `
+    <div class="sidebar-icon" id="info-trigger" title="Information">
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+    </div>`;
+
+    finalHtml = finalHtml.replace(settingsIconHtml, settingsIconHtml + infoIconHtml);
+
+    // 2. Inject Info Dialog (End of body)
+    const infoDialogHtml = `
+    <dialog id="info-dialog" class="settings-modal info-modal">
+        <div class="modal-header">
+            <h2>Information</h2>
+            <button id="close-info" class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body markdown-body">
+            ${infoContentHtml}
+        </div>
+    </dialog>`;
+
+    // Insert before Settings Dialog
+    finalHtml = finalHtml.replace('<dialog id="settings-dialog"', infoDialogHtml + '\n    <dialog id="settings-dialog"');
+
     fs.writeFileSync(outputPath, finalHtml);
     console.log('Build complete: index.html generated.');
 

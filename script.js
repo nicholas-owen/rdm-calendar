@@ -193,6 +193,30 @@ document.addEventListener('DOMContentLoaded', () => {
         settingsDialog.close();
     });
 
+    // Info Dialog
+    const infoTrigger = document.getElementById('info-trigger');
+    const infoDialog = document.getElementById('info-dialog');
+    const closeInfo = document.getElementById('close-info');
+
+    if (infoTrigger && infoDialog && closeInfo) {
+        infoTrigger.addEventListener('click', () => {
+            infoDialog.showModal();
+        });
+
+        closeInfo.addEventListener('click', () => {
+            infoDialog.close();
+        });
+
+        infoDialog.addEventListener('click', (e) => {
+            const rect = infoDialog.getBoundingClientRect();
+            const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+                rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
+            if (!isInDialog) {
+                infoDialog.close();
+            }
+        });
+    }
+
     // Close on click outside
     settingsDialog.addEventListener('click', (e) => {
         const rect = settingsDialog.getBoundingClientRect();
