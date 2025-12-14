@@ -132,18 +132,27 @@ try {
     // Inject list
     let finalHtml = template.replace('<!-- CONFERENCE_LIST_PLACEHOLDER -->', listHtml);
 
-    // Inject filters
-    // We expect a placeholder like <!-- PROFESSION_FILTERS_PLACEHOLDER -->
-    // Wrapping it in a div for layout control
+    // Inject filters and iCal button
     const filtersSectionHtml = `
     <div class="filters-section">
         <h3>Filter by Profession</h3>
         <div class="profession-filters">
             ${filtersHtml}
         </div>
+        <div class="ical-section">
+            <button id="download-ical" class="btn-ical">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line><path d="M12 14v4"></path><path d="M10 16h4"></path></svg>
+                Download iCal
+            </button>
+        </div>
     </div>`;
 
     finalHtml = finalHtml.replace('<!-- PROFESSION_FILTERS_PLACEHOLDER -->', filtersSectionHtml);
+
+    // Inject Data for Client-Side iCal Generation
+    const dataScript = `<script>window.CONFERENCE_DATA = ${JSON.stringify(conferences)};</script>`;
+    // Inject before script.js
+    finalHtml = finalHtml.replace('<script src="script.js"></script>', `${dataScript}\n    <script src="script.js"></script>`);
 
     fs.writeFileSync(outputPath, finalHtml);
     console.log('Build complete: index.html generated.');
