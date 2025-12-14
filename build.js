@@ -4,14 +4,6 @@ const yaml = require('js-yaml');
 
 const dataDir = path.join(__dirname, 'data');
 const outputDir = __dirname;
-const templatePath = path.join(__dirname, 'index.html'); // We will use index.html as a template for simplicity in this script, or better, separating template.
-
-// Actually, let's keep index.html as the "template" but we'll inject data into a specific container.
-// Or simpler: generate a data.js file that the frontend consumes?
-// The user asked for "renders files... web page will list...". Static generation is safer for SEO and "github pages" usually implies static.
-// Let's generate a full index.html from a template.
-
-// Wait, if I overwrite index.html, I need a source template. Let's call it `template.html`.
 const templateSrcPath = path.join(__dirname, 'template.html');
 const outputPath = path.join(__dirname, 'index.html');
 
@@ -21,9 +13,18 @@ function formatDate(dateStr) {
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
+function getProfessionHue(profession) {
+    let hash = 0;
+    for (let i = 0; i < profession.length; i++) {
+        hash = profession.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    return Math.abs(hash % 360);
+}
+
 try {
     const files = fs.readdirSync(dataDir).filter(file => file.endsWith('.yaml') || file.endsWith('.yml'));
     let conferences = [];
+    let allProfessions = new Set();
 
     files.forEach(file => {
         const filePath = path.join(dataDir, file);
@@ -31,6 +32,14 @@ try {
         try {
             const doc = yaml.load(fileContent);
             if (doc && doc.next) {
+                // Normalize professions to array
+                if (doc.professions && !Array.isArray(doc.professions)) {
+                    doc.professions = [doc.professions];
+                }
+
+                if (doc.professions) {
+                    doc.professions.forEach(p => allProfessions.add(p));
+                }
                 conferences.push(doc);
             }
         } catch (e) {
@@ -45,6 +54,19 @@ try {
         return dateA - dateB;
     });
 
+    // Generate Filter Sidebar HTML
+    const sortedProfessions = Array.from(allProfessions).sort();
+    const filtersHtml = sortedProfessions.map(p => {
+        const hue = getProfessionHue(p);
+        // Added 'active' class by default as per plan (All On)
+        // Added filter-btn class for JS selection
+        return `<button class="profession-tag filter-btn active" data-profession="${p}" style="--tag-hue: ${hue}deg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            ${p}
+        </button>`;
+    }).join('\n');
+
+
     // Generate HTML Item List
     const listHtml = conferences.map(conf => {
         const dateFrom = formatDate(conf.next['date-from']);
@@ -52,14 +74,13 @@ try {
         const dateDisplay = dateFrom === dateTo ? dateFrom : `${dateFrom} - ${dateTo}`;
 
         let professionsHtml = '';
-        if (conf.professions && Array.isArray(conf.professions)) {
+        let professionListAttr = '';
+
+        if (conf.professions && Array.isArray(conf.professions) && conf.professions.length > 0) {
+            professionListAttr = conf.professions.join(',');
             professionsHtml = `<div class="profession-tags">` +
                 conf.professions.map(p => {
-                    let hash = 0;
-                    for (let i = 0; i < p.length; i++) {
-                        hash = p.charCodeAt(i) + ((hash << 5) - hash);
-                    }
-                    const hue = Math.abs(hash % 360);
+                    const hue = getProfessionHue(p);
                     return `<span class="profession-tag" style="--tag-hue: ${hue}deg">
                         <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                         ${p}
@@ -84,8 +105,9 @@ try {
             <span>${conf.next.location}</span>
         </div>` : '';
 
+        // Added data-professions attribute
         return `
-        <div class="conference-card">
+        <div class="conference-card" data-professions="${professionListAttr}">
             <div class="conference-main">
                 <div class="conference-header">
                     ${professionsHtml}
@@ -108,7 +130,20 @@ try {
     let template = fs.readFileSync(templateSrcPath, 'utf8');
 
     // Inject list
-    const finalHtml = template.replace('<!-- CONFERENCE_LIST_PLACEHOLDER -->', listHtml);
+    let finalHtml = template.replace('<!-- CONFERENCE_LIST_PLACEHOLDER -->', listHtml);
+
+    // Inject filters
+    // We expect a placeholder like <!-- PROFESSION_FILTERS_PLACEHOLDER -->
+    // Wrapping it in a div for layout control
+    const filtersSectionHtml = `
+    <div class="filters-section">
+        <h3>Filter by Profession</h3>
+        <div class="profession-filters">
+            ${filtersHtml}
+        </div>
+    </div>`;
+
+    finalHtml = finalHtml.replace('<!-- PROFESSION_FILTERS_PLACEHOLDER -->', filtersSectionHtml);
 
     fs.writeFileSync(outputPath, finalHtml);
     console.log('Build complete: index.html generated.');

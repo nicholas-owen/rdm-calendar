@@ -113,7 +113,66 @@ body {
     opacity: 1;
 }
 
-/* Main Content */
+/* Sidebar Filters */
+.filters-section {
+    padding: 20px;
+    width: 100%;
+    margin-top: 10px;
+    border-top: 1px solid var(--sidebar-border);
+}
+
+.filters-section h3 {
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--muted-color);
+    margin-bottom: 12px;
+    font-weight: 600;
+}
+
+.profession-filters {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.sidebar {
+    width: 250px;
+    /* Expanded sidebar for filters */
+    align-items: flex-start;
+    /* Align content to start */
+}
+
+.sidebar-icon {
+    margin-left: 20px;
+    /* Align icon with padding */
+}
+
+/* Filter Buttons */
+.filter-btn {
+    cursor: pointer;
+    background: none;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+    opacity: 0.6;
+    filter: grayscale(100%);
+    width: 100%;
+    justify-content: flex-start;
+}
+
+.filter-btn:hover {
+    opacity: 0.8;
+    background-color: rgba(128, 128, 128, 0.05);
+}
+
+.filter-btn.active {
+    opacity: 1;
+    filter: grayscale(0%);
+    background-color: hsl(var(--tag-hue), var(--tag-sat), var(--tag-light));
+    border-color: hsl(var(--tag-hue), var(--tag-sat), 80%);
+}
+
 .main-content {
     flex: 1;
     overflow-y: auto;
