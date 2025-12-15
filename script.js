@@ -49,10 +49,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (activeFilters.size > 0) {
                 // Check intersection
-                // If card has NO professions, should it be shown? 
-                // Assuming cards usually have professions. If not, they might only show if we have a "No Profession" filter or special logic.
-                // For now, if activeFilters > 0, we only show matches.
-
                 for (const p of cardProfessions) {
                     if (activeFilters.has(p)) {
                         isVisible = true;
@@ -70,6 +66,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 card.style.display = 'none';
             }
         });
+
+        // Trigger Calendar Redraw
+        if (typeof renderCalendar === 'function') {
+            renderCalendar(currentCalendarDate);
+        }
     }
 
     // iCal Generation Logic
@@ -359,7 +360,23 @@ document.addEventListener('DOMContentLoaded', () => {
             const dateKey = `${year}-${mStr}-${dStr}`;
 
             if (eventDatesMap.has(dateKey)) {
-                const events = eventDatesMap.get(dateKey);
+                let events = eventDatesMap.get(dateKey);
+
+                // FILTER EVENTS based on activeFilters
+                if (activeFilters.size > 0) {
+                    events = events.filter(e => {
+                        return e.professions.some(p => activeFilters.has(p));
+                    });
+                } else {
+                    // If no filters active, show NONE
+                    events = [];
+                }
+
+                if (events.length === 0) {
+                    calendarGrid.appendChild(dayCell);
+                    continue;
+                }
+
                 const dotsContainer = document.createElement('div');
                 dotsContainer.classList.add('calendar-dots');
 
@@ -372,7 +389,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     dot.classList.add('event-dot');
                     const hue = getProfessionHue(p);
                     dot.style.backgroundColor = `hsl(${hue}, 70%, 50%)`;
-                    // dot.title = p; // Tooltip logic removed
                     dotsContainer.appendChild(dot);
                 });
                 dayCell.appendChild(dotsContainer);
