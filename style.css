@@ -534,48 +534,45 @@ body {
     /* Context for tooltip */
 }
 
-/* Tooltip Styles */
-.calendar-tooltip {
-    position: absolute;
-    background: var(--card-bg);
-    border: 1px solid var(--sidebar-border);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    border-radius: 8px;
-    padding: 12px;
-    z-index: 100;
-    width: 220px;
-    pointer-events: auto;
-    /* Allow clicking links */
+/* Info Panel Styles */
+.calendar-info-panel {
+    min-height: 120px;
+    padding: 15px;
+    border-bottom: 1px solid var(--sidebar-border);
+    background: var(--bg-color);
+    /* Match sidebar bg */
+    overflow-y: auto;
+    max-height: 200px;
 }
 
-.tooltip-event {
+.info-event {
     margin-bottom: 12px;
     border-bottom: 1px solid var(--sidebar-border);
     padding-bottom: 8px;
 }
 
-.tooltip-event:last-child {
+.info-event:last-child {
     border-bottom: none;
     margin-bottom: 0;
     padding-bottom: 0;
 }
 
-.tooltip-title {
+.info-title {
     margin: 0 0 4px 0;
     font-size: 0.95em;
     line-height: 1.3;
 }
 
-.tooltip-title a {
+.info-title a {
     color: var(--primary-color);
     text-decoration: none;
 }
 
-.tooltip-title a:hover {
+.info-title a:hover {
     text-decoration: underline;
 }
 
-.tooltip-meta {
+.info-meta {
     font-size: 0.8em;
     color: var(--muted-color);
     display: flex;
@@ -584,7 +581,7 @@ body {
     margin-bottom: 6px;
 }
 
-.tooltip-info {
+.info-desc {
     font-size: 0.8em;
     margin: 0 0 8px 0;
     display: -webkit-box;
@@ -593,10 +590,19 @@ body {
     overflow: hidden;
 }
 
-.tooltip-tags {
+.info-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 4px;
+}
+
+.info-tag {
+    font-size: 0.7em;
+    padding: 2px 6px;
+    border-radius: 10px;
+    color: #fff;
+    font-weight: 500;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .tooltip-tag {

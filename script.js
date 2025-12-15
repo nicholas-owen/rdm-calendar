@@ -262,27 +262,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevMonthBtn = document.getElementById('prev-month');
     const nextMonthBtn = document.getElementById('next-month');
 
-    // Global Tooltip (Created dynamically to avoid overflow issues)
-    let calendarTooltip = document.getElementById('calendar-tooltip-global');
-    if (!calendarTooltip) {
-        calendarTooltip = document.createElement('div');
-        calendarTooltip.id = 'calendar-tooltip-global';
-        calendarTooltip.className = 'calendar-tooltip';
-        calendarTooltip.style.display = 'none';
-        calendarTooltip.style.position = 'absolute'; // Relative to body
-        calendarTooltip.style.zIndex = '9999'; // Very high
-        document.body.appendChild(calendarTooltip);
-
-        // Keep open on hover
-        calendarTooltip.addEventListener('mouseenter', () => {
-            clearTimeout(hideTimeout);
-        });
-        calendarTooltip.addEventListener('mouseleave', () => {
-            hideTimeout = setTimeout(() => {
-                calendarTooltip.style.display = 'none';
-            }, 200);
-        });
-    }
+    // Info Panel Logic
+    const infoPanel = document.getElementById('calendar-info-panel');
+    const defaultInfoText = '<p class="text-muted" style="margin: 0; font-size: 0.8em; text-align: center;">Hover over a date to see details.</p>';
 
     let currentCalendarDate = new Date();
     // Map: 'YYYY-MM-DD' -> Set of profession strings
@@ -315,9 +297,19 @@ document.addEventListener('DOMContentLoaded', () => {
                     const dateKey = `${y}-${m}-${day}`;
 
                     if (!eventDatesMap.has(dateKey)) {
-                        eventDatesMap.set(dateKey, new Set());
+                        eventDatesMap.set(dateKey, []);
                     }
-                    professions.forEach(p => eventDatesMap.get(dateKey).add(p));
+
+                    const dayEvents = eventDatesMap.get(dateKey);
+                    if (!dayEvents.some(e => e.name === conf.name)) {
+                        dayEvents.push({
+                            name: conf.name,
+                            link: conf.next.link || conf.link,
+                            location: conf.next.location,
+                            info: conf.next.info,
+                            professions: professions
+                        });
+                    }
 
                     // Next day
                     d.setDate(d.getDate() + 1);
@@ -367,77 +359,55 @@ document.addEventListener('DOMContentLoaded', () => {
             const dateKey = `${year}-${mStr}-${dStr}`;
 
             if (eventDatesMap.has(dateKey)) {
+                const events = eventDatesMap.get(dateKey);
                 const dotsContainer = document.createElement('div');
                 dotsContainer.classList.add('calendar-dots');
 
-                const professions = Array.from(eventDatesMap.get(dateKey));
-                professions.forEach(p => {
+                // Collect unique professions for dots
+                const uniqueProfessions = new Set();
+                events.forEach(e => e.professions.forEach(p => uniqueProfessions.add(p)));
+
+                uniqueProfessions.forEach(p => {
                     const dot = document.createElement('div');
                     dot.classList.add('event-dot');
                     const hue = getProfessionHue(p);
                     dot.style.backgroundColor = `hsl(${hue}, 70%, 50%)`;
-                    dot.title = p; // Tooltip
+                    // dot.title = p; // Tooltip logic removed
                     dotsContainer.appendChild(dot);
                 });
                 dayCell.appendChild(dotsContainer);
 
-                // Tooltip Interaction (Day Cell)
+                // Info Panel Interaction
                 dayCell.addEventListener('mouseenter', () => {
-                    if (!calendarTooltip) return;
-                    clearTimeout(hideTimeout);
+                    if (!infoPanel) return;
 
-                    // Build Tooltip Content
                     let html = '';
                     events.forEach(event => {
                         const tagsHtml = event.professions.map(p => {
                             const hue = getProfessionHue(p);
-                            return `<span class="tooltip-tag" style="background-color: hsl(${hue}, 70%, 50%);">${p}</span>`;
+                            return `<span class="info-tag" style="background-color: hsl(${hue}, 70%, 50%);">${p}</span>`;
                         }).join('');
 
                         html += `
-                            <div class="tooltip-event">
-                                <h4 class="tooltip-title"><a href="${event.link}" target="_blank">${event.name}</a></h4>
-                                <div class="tooltip-meta">
-                                    ${event.location ? `<span class="tooltip-location">📍 ${event.location}</span>` : ''}
+                            <div class="info-event">
+                                <h4 class="info-title"><a href="${event.link}" target="_blank">${event.name}</a></h4>
+                                <div class="info-meta">
+                                    ${event.location ? `<span class="info-location">📍 ${event.location}</span>` : ''}
                                 </div>
-                                <p class="tooltip-info">${event.info || ''}</p>
-                                <div class="tooltip-tags">${tagsHtml}</div>
+                                <p class="info-desc">${event.info || ''}</p>
+                                <div class="info-tags">${tagsHtml}</div>
                             </div>
                         `;
                     });
 
-                    calendarTooltip.innerHTML = html;
-                    calendarTooltip.style.display = 'block';
-
-                    // Position Logic (Absolute to Body)
-                    const dayRect = dayCell.getBoundingClientRect();
-                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
-
-                    // Initial Position
-                    // Position ABOVE the day cell: top - height - 10px
-                    let top = dayRect.top + scrollTop - calendarTooltip.offsetHeight - 10;
-                    // Center horizontally: left + half width - half tooltip width
-                    let left = dayRect.left + scrollLeft + (dayRect.width / 2) - (calendarTooltip.offsetWidth / 2);
-
-                    // Prevent going off screen (Simple Check)
-                    if (left < 10) left = 10;
-                    if (left + calendarTooltip.offsetWidth > document.body.clientWidth) {
-                        left = document.body.clientWidth - calendarTooltip.offsetWidth - 10;
-                    }
-
-                    calendarTooltip.style.top = `${top}px`;
-                    calendarTooltip.style.left = `${left}px`;
+                    infoPanel.innerHTML = html;
                 });
 
                 dayCell.addEventListener('mouseleave', () => {
-                    if (calendarTooltip) {
-                        hideTimeout = setTimeout(() => {
-                            calendarTooltip.style.display = 'none';
-                        }, 200);
+                    if (infoPanel) {
+                        infoPanel.innerHTML = defaultInfoText;
                     }
                 });
-
             }
 
             // Highlight Today
