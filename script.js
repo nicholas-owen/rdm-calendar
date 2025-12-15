@@ -255,4 +255,133 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
+
+    // --- Mini Calendar Logic ---
+    const calendarGrid = document.getElementById('calendar-grid');
+    const monthYearSpan = document.getElementById('calendar-month-year');
+    const prevMonthBtn = document.getElementById('prev-month');
+    const nextMonthBtn = document.getElementById('next-month');
+
+    let currentCalendarDate = new Date();
+    // Map: 'YYYY-MM-DD' -> Set of profession strings
+    let eventDatesMap = new Map();
+
+    function getProfessionHue(profession) {
+        let hash = 0;
+        for (let i = 0; i < profession.length; i++) {
+            hash = profession.charCodeAt(i) + ((hash << 5) - hash);
+        }
+        return Math.abs(hash % 360);
+    }
+
+    function parseEventDates() {
+        if (!window.CONFERENCE_DATA) return;
+        eventDatesMap.clear();
+
+        window.CONFERENCE_DATA.forEach(conf => {
+            if (conf.next && conf.next['date-from']) {
+                const startDate = new Date(conf.next['date-from']);
+                const endDate = conf.next['date-to'] ? new Date(conf.next['date-to']) : startDate;
+                const professions = conf.professions || [];
+
+                // Iterate from start to end date
+                let d = new Date(startDate);
+                while (d <= endDate) {
+                    const y = d.getFullYear();
+                    const m = String(d.getMonth() + 1).padStart(2, '0');
+                    const day = String(d.getDate()).padStart(2, '0');
+                    const dateKey = `${y}-${m}-${day}`;
+
+                    if (!eventDatesMap.has(dateKey)) {
+                        eventDatesMap.set(dateKey, new Set());
+                    }
+                    professions.forEach(p => eventDatesMap.get(dateKey).add(p));
+
+                    // Next day
+                    d.setDate(d.getDate() + 1);
+                }
+            }
+        });
+    }
+
+    function renderCalendar(date) {
+        if (!calendarGrid || !monthYearSpan) return;
+
+        const year = date.getFullYear();
+        const month = date.getMonth();
+
+        // Update Header
+        const monthNames = ["January", "February", "March", "April", "May", "June",
+            "July", "August", "September", "October", "November", "December"
+        ];
+        monthYearSpan.textContent = `${monthNames[month]} ${year}`;
+
+        // Clear Grid
+        calendarGrid.innerHTML = '';
+
+        // First day of month
+        const firstDay = new Date(year, month, 1).getDay(); // 0 (Sun) - 6 (Sat)
+        const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+        // Padding for previous month
+        for (let i = 0; i < firstDay; i++) {
+            const emptyCell = document.createElement('div');
+            emptyCell.classList.add('calendar-day', 'empty');
+            calendarGrid.appendChild(emptyCell);
+        }
+
+        // Days
+        for (let d = 1; d <= daysInMonth; d++) {
+            const dayCell = document.createElement('div');
+            dayCell.classList.add('calendar-day');
+
+            const dayNum = document.createElement('span');
+            dayNum.textContent = d;
+            dayCell.appendChild(dayNum);
+
+            // Check events
+            const mStr = String(month + 1).padStart(2, '0');
+            const dStr = String(d).padStart(2, '0');
+            const dateKey = `${year}-${mStr}-${dStr}`;
+
+            if (eventDatesMap.has(dateKey)) {
+                const dotsContainer = document.createElement('div');
+                dotsContainer.classList.add('calendar-dots');
+
+                const professions = Array.from(eventDatesMap.get(dateKey));
+                professions.forEach(p => {
+                    const dot = document.createElement('div');
+                    dot.classList.add('event-dot');
+                    const hue = getProfessionHue(p);
+                    dot.style.backgroundColor = `hsl(${hue}, 70%, 50%)`;
+                    dot.title = p; // Tooltip
+                    dotsContainer.appendChild(dot);
+                });
+                dayCell.appendChild(dotsContainer);
+            }
+
+            // Highlight Today
+            const today = new Date();
+            if (d === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                dayCell.classList.add('today');
+            }
+
+            calendarGrid.appendChild(dayCell);
+        }
+    }
+
+    if (calendarGrid) {
+        parseEventDates();
+        renderCalendar(currentCalendarDate);
+
+        prevMonthBtn.addEventListener('click', () => {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() - 1);
+            renderCalendar(currentCalendarDate);
+        });
+
+        nextMonthBtn.addEventListener('click', () => {
+            currentCalendarDate.setMonth(currentCalendarDate.getMonth() + 1);
+            renderCalendar(currentCalendarDate);
+        });
+    }
 });

@@ -57,6 +57,18 @@
             </button>
         </div>
     </div>
+
+            <div class="calendar-widget">
+                <div class="calendar-header">
+                    <button id="prev-month" class="cal-nav-btn">&lt;</button>
+                    <span id="calendar-month-year"></span>
+                    <button id="next-month" class="cal-nav-btn">&gt;</button>
+                </div>
+                <div class="calendar-weekdays">
+                    <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                </div>
+                <div id="calendar-grid" class="calendar-grid"></div>
+            </div>
         </aside>
 
         <!-- Main Content -->
@@ -258,8 +270,27 @@
             <button id="close-info" class="close-btn">&times;</button>
         </div>
         <div class="modal-body markdown-body">
-            <h1>Information</h1>
-<p>An example information file is provided in Markdown.</p>
+            <h1>Research Data Management Calendar</h1>
+<p>Welcome to the RDM Calendar, a curated list of conferences and events relevant to the Research Data Management (RDM) community.</p>
+<h2>Purpose</h2>
+<p>This application helps Data Stewards, Research Software Engineers (RSEs), Data Scientists, and other research technology professionals stay informed about upcoming meetings, plenaries, and conferences within their domain. It serves as a central hub to track events that matter to you.</p>
+<h2>Features</h2>
+<ul>
+<li><strong>Curated Timeline</strong>: Visualize upcoming events in chronological order with key details like dates, location, and description.</li>
+<li><strong>Profession Filters</strong>: Use the sidebar to filter events based on your role (e.g., toggle &quot;RSE&quot; or &quot;Data Steward&quot; to see only relevant gatherings).</li>
+<li><strong>iCal Integration</strong>: Click the &quot;Download iCal&quot; button to generate a customized calendar file (<code>.ics</code>) that includes only your currently filtered events.</li>
+<li><strong>Themes</strong>: Customize your viewing experience with Light, Dark, and Modern themes accessible via the Settings menu.</li>
+</ul>
+<h2>Contributing</h2>
+<p>The underlying data for this calendar is managed through simple YAML files located in the <code>data/</code> directory. Each file represents a conference and includes metadata such as:</p>
+<ul>
+<li>Conference Name and Link</li>
+<li>Target Professions</li>
+<li>Event Dates and Details</li>
+</ul>
+<p>Please view the <code>example.yaml</code> file for a template.</p>
+<p>CC BY-SA 4.0
+<a href="https://nicholas-owen.github.io/">Nicholas Owen</a> 2025.</p>
 
         </div>
     </dialog>
