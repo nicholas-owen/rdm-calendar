@@ -358,6 +358,62 @@ document.addEventListener('DOMContentLoaded', () => {
                     dotsContainer.appendChild(dot);
                 });
                 dayCell.appendChild(dotsContainer);
+
+                // Tooltip Interaction (Day Cell)
+                dayCell.addEventListener('mouseenter', () => {
+                    if (!calendarTooltip) return;
+                    clearTimeout(hideTimeout);
+
+                    // Build Tooltip Content
+                    let html = '';
+                    events.forEach(event => {
+                        const tagsHtml = event.professions.map(p => {
+                            const hue = getProfessionHue(p);
+                            return `<span class="tooltip-tag" style="background-color: hsl(${hue}, 70%, 50%);">${p}</span>`;
+                        }).join('');
+
+                        html += `
+                            <div class="tooltip-event">
+                                <h4 class="tooltip-title"><a href="${event.link}" target="_blank">${event.name}</a></h4>
+                                <div class="tooltip-meta">
+                                    ${event.location ? `<span class="tooltip-location">📍 ${event.location}</span>` : ''}
+                                </div>
+                                <p class="tooltip-info">${event.info || ''}</p>
+                                <div class="tooltip-tags">${tagsHtml}</div>
+                            </div>
+                        `;
+                    });
+
+                    calendarTooltip.innerHTML = html;
+                    calendarTooltip.hidden = false;
+                    calendarTooltip.style.display = 'block';
+
+                    // Position Logic
+                    const dayRect = dayCell.getBoundingClientRect();
+                    const widgetRect = calendarGrid.closest('.calendar-widget').getBoundingClientRect();
+
+                    const top = dayRect.top - widgetRect.top - calendarTooltip.offsetHeight - 10;
+
+                    // Center horizontally relative to day cell
+                    let left = (dayRect.left - widgetRect.left) + (dayRect.width / 2) - (calendarTooltip.offsetWidth / 2);
+
+                    // Clamp Left/Right
+                    if (left < 5) left = 5;
+                    const maxLeft = widgetRect.width - calendarTooltip.offsetWidth - 5;
+                    if (left > maxLeft) left = maxLeft;
+
+                    calendarTooltip.style.top = `${top}px`;
+                    calendarTooltip.style.left = `${left}px`;
+                });
+
+                dayCell.addEventListener('mouseleave', () => {
+                    if (calendarTooltip) {
+                        hideTimeout = setTimeout(() => {
+                            calendarTooltip.hidden = true;
+                            calendarTooltip.style.display = 'none';
+                        }, 200);
+                    }
+                });
             }
 
             // Highlight Today
