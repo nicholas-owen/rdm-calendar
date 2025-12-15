@@ -262,6 +262,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const prevMonthBtn = document.getElementById('prev-month');
     const nextMonthBtn = document.getElementById('next-month');
 
+    // Global Tooltip (Created dynamically to avoid overflow issues)
+    let calendarTooltip = document.getElementById('calendar-tooltip-global');
+    if (!calendarTooltip) {
+        calendarTooltip = document.createElement('div');
+        calendarTooltip.id = 'calendar-tooltip-global';
+        calendarTooltip.className = 'calendar-tooltip';
+        calendarTooltip.style.display = 'none';
+        calendarTooltip.style.position = 'absolute'; // Relative to body
+        calendarTooltip.style.zIndex = '9999'; // Very high
+        document.body.appendChild(calendarTooltip);
+
+        // Keep open on hover
+        calendarTooltip.addEventListener('mouseenter', () => {
+            clearTimeout(hideTimeout);
+        });
+        calendarTooltip.addEventListener('mouseleave', () => {
+            hideTimeout = setTimeout(() => {
+                calendarTooltip.style.display = 'none';
+            }, 200);
+        });
+    }
+
     let currentCalendarDate = new Date();
     // Map: 'YYYY-MM-DD' -> Set of profession strings
     let eventDatesMap = new Map();
@@ -385,22 +407,24 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
 
                     calendarTooltip.innerHTML = html;
-                    calendarTooltip.hidden = false;
                     calendarTooltip.style.display = 'block';
 
-                    // Position Logic
+                    // Position Logic (Absolute to Body)
                     const dayRect = dayCell.getBoundingClientRect();
-                    const widgetRect = calendarGrid.closest('.calendar-widget').getBoundingClientRect();
+                    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                    const scrollLeft = window.pageXOffset || document.documentElement.scrollLeft;
 
-                    const top = dayRect.top - widgetRect.top - calendarTooltip.offsetHeight - 10;
+                    // Initial Position
+                    // Position ABOVE the day cell: top - height - 10px
+                    let top = dayRect.top + scrollTop - calendarTooltip.offsetHeight - 10;
+                    // Center horizontally: left + half width - half tooltip width
+                    let left = dayRect.left + scrollLeft + (dayRect.width / 2) - (calendarTooltip.offsetWidth / 2);
 
-                    // Center horizontally relative to day cell
-                    let left = (dayRect.left - widgetRect.left) + (dayRect.width / 2) - (calendarTooltip.offsetWidth / 2);
-
-                    // Clamp Left/Right
-                    if (left < 5) left = 5;
-                    const maxLeft = widgetRect.width - calendarTooltip.offsetWidth - 5;
-                    if (left > maxLeft) left = maxLeft;
+                    // Prevent going off screen (Simple Check)
+                    if (left < 10) left = 10;
+                    if (left + calendarTooltip.offsetWidth > document.body.clientWidth) {
+                        left = document.body.clientWidth - calendarTooltip.offsetWidth - 10;
+                    }
 
                     calendarTooltip.style.top = `${top}px`;
                     calendarTooltip.style.left = `${left}px`;
@@ -409,11 +433,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 dayCell.addEventListener('mouseleave', () => {
                     if (calendarTooltip) {
                         hideTimeout = setTimeout(() => {
-                            calendarTooltip.hidden = true;
                             calendarTooltip.style.display = 'none';
                         }, 200);
                     }
                 });
+
             }
 
             // Highlight Today
