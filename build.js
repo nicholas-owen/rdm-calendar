@@ -151,8 +151,8 @@ try {
 
     // Inject Data for Client-Side iCal Generation
     const dataScript = `<script>window.CONFERENCE_DATA = ${JSON.stringify(conferences)};</script>`;
-    // Inject before script.js
-    finalHtml = finalHtml.replace('<script src="script.js"></script>', `${dataScript}\n    <script src="script.js"></script>`);
+    // Inject before script.js with cache busting
+    finalHtml = finalHtml.replace('<script src="script.js"></script>', `${dataScript}\n    <script src="script.js?v=${Date.now()}"></script>`);
 
     // Inject Info Button & Dialog
     const marked = require('marked');
