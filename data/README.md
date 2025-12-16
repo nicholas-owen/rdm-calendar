@@ -1,6 +1,6 @@
-# Events Calendar
+# Conference and Event Calendar
 
-Welcome to the Events Calendar, a curated list of conferences and events relevant to the digital research technology professional (dRTP) community.
+Welcome to the Conference and Event Calendar, a curated list of conferences and events relevant to the digital research technology professional (dRTP) community.
 
 ## Purpose
 
