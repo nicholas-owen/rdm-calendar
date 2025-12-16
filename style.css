@@ -162,7 +162,7 @@ body {
 }
 
 .sidebar {
-    width: 320px;
+    width: 250px;
     /* Expanded sidebar for filters */
     align-items: flex-start;
     /* Align content to start */
