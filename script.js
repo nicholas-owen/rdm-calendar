@@ -492,15 +492,19 @@ document.addEventListener('DOMContentLoaded', () => {
             // Construct YAML
             let yaml = `name: "${name}"\n`;
             yaml += `link: "${link}"\n`;
-            yaml += `date-from: "${dateFrom}"\n`;
-            if (dateTo) yaml += `date-to: "${dateTo}"\n`;
-            if (location) yaml += `location: "${location}"\n`;
+
             if (professions.length > 0) {
                 yaml += `professions:\n`;
                 professions.forEach(p => yaml += `  - "${p}"\n`);
             }
+
+            yaml += `next:\n`;
+            yaml += `  date-from: "${dateFrom}"\n`;
+            if (dateTo) yaml += `  date-to: "${dateTo}"\n`;
+            yaml += `  link: "${link}"\n`; // Defaulting to main link
+            if (location) yaml += `  location: "${location}"\n`;
             if (desc) {
-                yaml += `info: |\n  ${desc.replace(/\n/g, '\n  ')}\n`;
+                yaml += `  info: |\n    ${desc.replace(/\n/g, '\n    ')}\n`;
             }
 
             const issueTitle = `New Event: ${name}`;
