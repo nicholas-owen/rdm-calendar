@@ -162,7 +162,7 @@ body {
 }
 
 .sidebar {
-    width: 250px;
+    width: 320px;
     /* Expanded sidebar for filters */
     align-items: flex-start;
     /* Align content to start */
@@ -235,7 +235,8 @@ body {
     margin: 0 auto;
     width: 100%;
     /* Dotted Grid Background */
-    background-image: radial-gradient(var(--grid-dot-color) 1px, transparent 1px);
+    background-color: transparent;
+    background-image: radial-gradient(circle, var(--grid-dot-color) 1.5px, transparent 1.6px);
     background-size: 20px 20px;
 }
 
