@@ -1,0 +1,12 @@
+name: "Test event2"
+link: "http://www.google.com"
+professions:
+  - "Data Stewards"
+  - "PRISM"
+next:
+  date-from: "2026-01-01"
+  date-to: "2026-01-01"
+  link: "http://www.google.com"
+  location: "virtual"
+  info: |
+    something
