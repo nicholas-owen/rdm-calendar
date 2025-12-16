@@ -1,6 +1,6 @@
-# Research Data Management Calendar
+# Events Calendar
 
-Welcome to the RDM Calendar, a curated list of conferences and events relevant to the Research Data Management (RDM) community.
+Welcome to the Events Calendar, a curated list of conferences and events relevant to the digital research technology professional (dRTP) community.
 
 ## Purpose
 
