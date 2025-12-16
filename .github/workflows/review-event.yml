@@ -48,9 +48,30 @@ jobs:
                  return;
             }
 
-            // Create File
-            const filename = `data/event-issue-${issueNumber}.yaml`;
+            // Parse Name and Year for Filename
+            const nameMatch = yamlContent.match(/name:\s*["']?([^"'\n\r]+)["']?/);
+            const dateMatch = yamlContent.match(/date-from:\s*["']?(\d{4})/);
+
+            let filename = `data/event-issue-${issueNumber}.yaml`; // Default fallback
+
+            if (nameMatch && dateMatch) {
+                const name = nameMatch[1].trim();
+                const year = dateMatch[1];
+                // Get first word, sanitize to alphanumeric
+                const firstWord = name.split(/\s+/)[0].replace(/[^a-zA-Z0-9]/g, '');
+                
+                if (firstWord && year) {
+                    filename = `data/${firstWord}_${year}.yaml`;
+                }
+            }
+
             const filePath = path.join(process.env.GITHUB_WORKSPACE, filename);
+            
+            // Check if file exists to avoid overwriting (optional safety, appends timestamp if needed)
+            if (fs.existsSync(filePath)) {
+                console.log(`File ${filename} already exists. Appending issue number.`);
+                filename = filename.replace('.yaml', `_${issueNumber}.yaml`);
+            }
             
             fs.writeFileSync(filePath, yamlContent);
             console.log(`Created file: ${filename}`);

@@ -821,10 +821,31 @@ body {
     border-radius: 8px;
     font-weight: 600;
     cursor: pointer;
-    margin-top: 10px;
     transition: background-color 0.2s;
 }
 
 .btn-submit:hover {
     background-color: var(--accent-color);
+}
+
+.form-actions-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.btn-secondary {
+    width: 100%;
+    padding: 12px;
+    background-color: var(--sidebar-border);
+    color: var(--text-color);
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.btn-secondary:hover {
+    background-color: rgba(128, 128, 128, 0.4);
 }

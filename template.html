@@ -86,7 +86,6 @@
     <dialog id="submit-dialog" class="settings-modal submit-modal">
         <div class="modal-header">
             <h2>Submit Event</h2>
-            <button id="close-submit" class="close-btn">&times;</button>
         </div>
         <div class="modal-body">
             <form id="submit-form">
@@ -122,7 +121,10 @@
                         <!-- FORM_PROFESSIONS_PLACEHOLDER -->
                     </div>
                 </div>
-                <button type="submit" class="btn-submit">Prepare GitHub Issue</button>
+                <div class="form-actions-row">
+                    <button type="submit" class="btn-submit">Submit Event Info</button>
+                    <button type="button" id="close-submit" class="btn-secondary">Close</button>
+                </div>
             </form>
         </div>
     </dialog>
