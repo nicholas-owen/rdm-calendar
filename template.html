@@ -25,6 +25,13 @@
                         </path>
                     </svg>
                 </div>
+                <div class="sidebar-icon" id="submit-trigger" title="Submit Event">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="12" y1="5" x2="12" y2="19"></line>
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                    </svg>
+                </div>
             </div>
             <!-- PROFESSION_FILTERS_PLACEHOLDER -->
 
@@ -72,6 +79,55 @@
                 <button class="theme-btn" data-theme="theme-dark">Dark</button>
                 <button class="theme-btn" data-theme="theme-modern">Modern</button>
             </div>
+        </div>
+    </dialog>
+
+    <!-- Submit Event Dialog -->
+    <dialog id="submit-dialog" class="settings-modal submit-modal">
+        <div class="modal-header">
+            <h2>Submit Event</h2>
+            <button id="close-submit" class="close-btn">&times;</button>
+        </div>
+        <div class="modal-body">
+            <form id="submit-form">
+                <div class="form-group">
+                    <label for="event-name">Event Name *</label>
+                    <input type="text" id="event-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="event-link">Link *</label>
+                    <input type="url" id="event-link" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="event-date-from">Start Date *</label>
+                        <input type="date" id="event-date-from" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event-date-to">End Date</label>
+                        <input type="date" id="event-date-to">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="event-location">Location</label>
+                    <input type="text" id="event-location" placeholder="e.g. London, UK">
+                </div>
+                <div class="form-group">
+                    <label for="event-desc">Description</label>
+                    <textarea id="event-desc" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Professions (Tags)</label>
+                    <div class="checkbox-group">
+                        <label><input type="checkbox" name="profession" value="RSE"> RSE</label>
+                        <label><input type="checkbox" name="profession" value="Researcher"> Researcher</label>
+                        <label><input type="checkbox" name="profession" value="Data Steward"> Data Steward</label>
+                        <label><input type="checkbox" name="profession" value="Librarian"> Librarian</label>
+                        <label><input type="checkbox" name="profession" value="IT Professional"> IT Professional</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">Prepare GitHub Issue</button>
+            </form>
         </div>
     </dialog>
 

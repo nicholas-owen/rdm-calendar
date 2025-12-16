@@ -450,4 +450,69 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCalendar(currentCalendarDate);
         });
     }
+
+    // --- Submit Event Logic ---
+    const submitTrigger = document.getElementById('submit-trigger');
+    const submitDialog = document.getElementById('submit-dialog');
+    const closeSubmit = document.getElementById('close-submit');
+    const submitForm = document.getElementById('submit-form');
+
+    if (submitTrigger && submitDialog && closeSubmit && submitForm) {
+        submitTrigger.addEventListener('click', () => {
+            submitDialog.showModal();
+        });
+
+        closeSubmit.addEventListener('click', () => {
+            submitDialog.close();
+        });
+
+        submitDialog.addEventListener('click', (e) => {
+            const rect = submitDialog.getBoundingClientRect();
+            const isInDialog = (rect.top <= e.clientY && e.clientY <= rect.top + rect.height &&
+                rect.left <= e.clientX && e.clientX <= rect.left + rect.width);
+            if (!isInDialog) {
+                submitDialog.close();
+            }
+        });
+
+        submitForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+
+            // Gather Data
+            const name = document.getElementById('event-name').value;
+            const link = document.getElementById('event-link').value;
+            const dateFrom = document.getElementById('event-date-from').value;
+            const dateTo = document.getElementById('event-date-to').value;
+            const location = document.getElementById('event-location').value;
+            const desc = document.getElementById('event-desc').value;
+
+            const professions = Array.from(document.querySelectorAll('input[name="profession"]:checked'))
+                .map(cb => cb.value);
+
+            // Construct YAML
+            let yaml = `name: "${name}"\n`;
+            yaml += `link: "${link}"\n`;
+            yaml += `date-from: "${dateFrom}"\n`;
+            if (dateTo) yaml += `date-to: "${dateTo}"\n`;
+            if (location) yaml += `location: "${location}"\n`;
+            if (professions.length > 0) {
+                yaml += `professions:\n`;
+                professions.forEach(p => yaml += `  - "${p}"\n`);
+            }
+            if (desc) {
+                yaml += `info: |\n  ${desc.replace(/\n/g, '\n  ')}\n`;
+            }
+
+            const issueTitle = `New Event: ${name}`;
+            const issueBody = `Please review this event submission.\n\n\`\`\`yaml\n${yaml}\`\`\`\n\n_Submitted via RDM Calendar Form_`;
+
+            // Encode for URL
+            const url = `https://github.com/nicholas-owen/rdm-calendar/issues/new?title=${encodeURIComponent(issueTitle)}&body=${encodeURIComponent(issueBody)}`;
+
+            // Open GitHub
+            window.open(url, '_blank');
+            submitDialog.close();
+            submitForm.reset();
+        });
+    }
 });
