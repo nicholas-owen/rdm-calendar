@@ -113,17 +113,13 @@
                     <input type="text" id="event-location" placeholder="e.g. London, UK">
                 </div>
                 <div class="form-group">
-                    <label for="event-desc">Description</label>
+                    <label for="event-desc">Information</label>
                     <textarea id="event-desc" rows="3"></textarea>
                 </div>
                 <div class="form-group">
-                    <label>Professions (Tags)</label>
-                    <div class="checkbox-group">
-                        <label><input type="checkbox" name="profession" value="RSE"> RSE</label>
-                        <label><input type="checkbox" name="profession" value="Researcher"> Researcher</label>
-                        <label><input type="checkbox" name="profession" value="Data Steward"> Data Steward</label>
-                        <label><input type="checkbox" name="profession" value="Librarian"> Librarian</label>
-                        <label><input type="checkbox" name="profession" value="IT Professional"> IT Professional</label>
+                    <label>Professions (Select all that apply)</label>
+                    <div class="profession-filters form-filters">
+                        <!-- FORM_PROFESSIONS_PLACEHOLDER -->
                     </div>
                 </div>
                 <button type="submit" class="btn-submit">Prepare GitHub Issue</button>

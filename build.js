@@ -58,9 +58,16 @@ try {
     const sortedProfessions = Array.from(allProfessions).sort();
     const filtersHtml = sortedProfessions.map(p => {
         const hue = getProfessionHue(p);
-        // Added 'active' class by default as per plan (All On)
-        // Added filter-btn class for JS selection
         return `<button class="profession-tag filter-btn active" data-profession="${p}" style="--tag-hue: ${hue}deg">
+            <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+            ${p}
+        </button>`;
+    }).join('\n');
+
+    // Generate Form Professions HTML (Same style, but start unselected)
+    const formFiltersHtml = sortedProfessions.map(p => {
+        const hue = getProfessionHue(p);
+        return `<button type="button" class="profession-tag form-btn" data-profession="${p}" style="--tag-hue: ${hue}deg">
             <svg xmlns="http://www.w3.org/2000/svg" width="8" height="8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
             ${p}
         </button>`;
@@ -148,6 +155,7 @@ try {
     </div>`;
 
     finalHtml = finalHtml.replace('<!-- PROFESSION_FILTERS_PLACEHOLDER -->', filtersSectionHtml);
+    finalHtml = finalHtml.replace('<!-- FORM_PROFESSIONS_PLACEHOLDER -->', formFiltersHtml);
 
     // Inject Data for Client-Side iCal Generation
     const dataScript = `<script>window.CONFERENCE_DATA = ${JSON.stringify(conferences)};</script>`;

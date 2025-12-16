@@ -782,6 +782,36 @@ body {
     margin: 0;
 }
 
+/* Form Filter Buttons (Reusing profession-tag styles) */
+.profession-tag.form-btn {
+    cursor: pointer;
+    opacity: 0.5;
+    filter: grayscale(0.8);
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    /* Prevent layout shift */
+}
+
+.profession-tag.form-btn:hover {
+    opacity: 0.8;
+    transform: translateY(-1px);
+}
+
+.profession-tag.form-btn.selected {
+    opacity: 1;
+    filter: none;
+    border-color: var(--text-color);
+    /* Highlight selected */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.profession-filters.form-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 0;
+}
+
 .btn-submit {
     width: 100%;
     padding: 12px;
