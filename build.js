@@ -115,19 +115,17 @@ try {
         // Added data-professions attribute
         return `
         <div class="conference-card" data-professions="${professionListAttr}">
-            <div class="conference-main">
-                <div class="conference-header">
-                    ${professionsHtml}
-                    <h3><a href="${conf.link}" target="_blank">${conf.name}</a></h3>
-                    <div class="conference-meta">
-                        <span class="conference-date">${dateDisplay}</span>
-                        ${locationHtml}
-                    </div>
-                    ${infoHtml}
+            <div class="conference-actions">
+                <a href="${conf.next.link}" target="_blank" class="btn-visit">Visit Meeting Page</a>
+            </div>
+            <div class="conference-header">
+                ${professionsHtml}
+                <h3><a href="${conf.link}" target="_blank">${conf.name}</a></h3>
+                <div class="conference-meta">
+                    <span class="conference-date">${dateDisplay}</span>
+                    ${locationHtml}
                 </div>
-                <div class="conference-actions">
-                    <a href="${conf.next.link}" target="_blank" class="btn-visit">Visit Meeting Page</a>
-                </div>
+                ${infoHtml}
             </div>
         </div>
         `;

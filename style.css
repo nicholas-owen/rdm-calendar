@@ -300,10 +300,14 @@ body {
     padding: 24px;
     box-shadow: var(--card-shadow);
     border: 1px solid var(--sidebar-border);
-    display: flex;
-    flex-direction: column;
-    /* Changed for expandable section */
+    display: block;
     transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.conference-card::after {
+    content: "";
+    display: table;
+    clear: both;
 }
 
 .theme-modern .conference-card {
@@ -316,19 +320,9 @@ body {
     box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
 
-.conference-main {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    /* Changed to start for tag alignment */
-    width: 100%;
-    gap: 20px;
-    /* Gap between content and button */
-}
-
 /* Header tweaks */
 .conference-header {
-    flex: 1;
+    display: block;
 }
 
 .conference-header h3 {
@@ -405,9 +399,9 @@ body {
 }
 
 .conference-actions {
-    flex-shrink: 0;
-    padding-top: 10px;
-    /* Align with title visually */
+    float: right;
+    margin-left: 20px;
+    margin-bottom: 10px;
 }
 
 .btn-visit {
